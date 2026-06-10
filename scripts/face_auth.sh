@@ -30,18 +30,16 @@ if [ ! -f "$AUTH_SCRIPT" ]; then
     exit 1
 fi
 
-if [ ! -d "$VENV_DIR" ]; then
-    echo "$TIMESTAMP - ERROR: venv not found" >> "$LOG_FILE"
-    exit 1
+# Activate venv if present (dev setups), otherwise use system Python
+if [ -d "$VENV_DIR" ]; then
+    source "$VENV_DIR/bin/activate"
 fi
-
-source "$VENV_DIR/bin/activate"
 
 cd "$SCRIPT_DIR" || exit 1
 
 # Use timeout to prevent PAM hanging forever
 # --kill-after=2 ensures processes are killed even if they ignore SIGTERM
-timeout --kill-after=2 "$TIMEOUT" python "$AUTH_SCRIPT" "$@"
+timeout --kill-after=2 "$TIMEOUT" python3 "$AUTH_SCRIPT" "$@"
 RESULT=$?
 
 echo "$TIMESTAMP - RESULT: $RESULT" >> "$LOG_FILE"

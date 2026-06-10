@@ -1,10 +1,6 @@
 import logging
 import sys
 import os
-import atexit
-
-LOG_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'logs')
-os.makedirs(LOG_DIR, exist_ok=True)
 
 _initialized = False
 
@@ -27,7 +23,11 @@ def setup_logging(debug=False, log_to_syslog=True):
         console.setFormatter(fmt)
         root.addHandler(console)
 
-        main_log = os.path.join(LOG_DIR, 'main.log')
+        from core import config
+        log_dir = config.log_dir()
+        os.makedirs(log_dir, exist_ok=True)
+
+        main_log = os.path.join(log_dir, 'main.log')
         file_handler = logging.FileHandler(main_log)
         file_handler.setLevel(level)
         file_handler.setFormatter(fmt)

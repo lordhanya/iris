@@ -3,22 +3,41 @@ import os
 import sys
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+USER_CONFIG_DIR = os.path.expanduser("~/.config/iris")
+USER_DATA_DIR = os.path.expanduser("~/.local/share/iris")
 
 _config = None
+_data_base = None
+
+
+def _find_config():
+    """Look for config in order: user config, then local config."""
+    user_cfg = os.path.join(USER_CONFIG_DIR, "config.ini")
+    if os.path.exists(user_cfg):
+        return user_cfg, USER_DATA_DIR
+    local_cfg = os.path.join(PROJECT_DIR, "config.ini")
+    if os.path.exists(local_cfg):
+        return local_cfg, PROJECT_DIR
+    return None, None
+
 
 def load():
-    global _config
+    global _config, _data_base
     if _config is not None:
         return _config
 
     _config = configparser.ConfigParser()
-    config_path = os.path.join(PROJECT_DIR, 'config.ini')
+    cfg_path, _data_base = _find_config()
 
-    if not os.path.exists(config_path):
-        print(f"FATAL: Config file not found at {config_path}", file=sys.stderr)
+    if cfg_path is None:
+        print(
+            f"FATAL: No config.ini found. Create ~/.config/iris/config.ini "
+            f"or place one at {PROJECT_DIR}/config.ini",
+            file=sys.stderr,
+        )
         sys.exit(1)
 
-    _config.read(config_path)
+    _config.read(cfg_path)
     return _config
 
 
@@ -55,7 +74,7 @@ def getboolean(section, key, fallback=None):
 
 
 def resolve(path):
-    return os.path.join(PROJECT_DIR, path)
+    return os.path.join(_data_base if _data_base is not None else PROJECT_DIR, path)
 
 
 def video_device():

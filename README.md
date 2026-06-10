@@ -61,14 +61,16 @@ sudo scripts/install-pam.sh
 
 ### Enroll your face
 ```bash
-source venv/bin/activate
-python cli/enroll.py --force
+iris-enroll --force
+# Or from a local checkout:
+# source venv/bin/activate && python cli/enroll.py --force
 ```
 
 ### Test authentication
 ```bash
-source venv/bin/activate
-python cli/auth.py --timeout 10
+iris-auth --timeout 10
+# Or from a local checkout:
+# source venv/bin/activate && python cli/auth.py --timeout 10
 ```
 
 ### Lock and unlock
@@ -83,17 +85,20 @@ loginctl lock-session
 | Method | Command |
 |--------|---------|
 | Emergency disable | `touch /tmp/face-auth-emergency-disable` |
-| Config disable | Set `disabled = true` in `config.ini` |
+| Config disable | Set `disabled = true` in `~/.config/iris/config.ini` |
 | Restore PAM backup | `sudo cp /etc/pam.d/sddm.backup /etc/pam.d/sddm` |
 | Uninstall PAM | `sudo scripts/uninstall-pam.sh` |
 
 ## Configuration
 
-Copy `config.example.ini` to `config.ini` and edit:
+Copy `config.example.ini` to `~/.config/iris/config.ini` and edit:
 
 ```bash
-cp config.example.ini config.ini
+mkdir -p ~/.config/iris
+cp /usr/share/iris/config.example.ini ~/.config/iris/config.ini
 ```
+
+If running from a local checkout, place it in the project root instead.
 
 See [docs/CONFIGURATION.md](docs/CONFIGURATION.md) for all options.
 

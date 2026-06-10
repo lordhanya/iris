@@ -4,19 +4,14 @@ import numpy as np
 import logging
 import os
 
-from core.face_utils import get_face_encoder, get_shape_predictor
+from core.face_utils import get_face_encoder, get_shape_predictor, MODEL_DIR
 
 from core.logger import get_logger
 log = get_logger(__name__)
 
-MODEL_DIR = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)),
-    '..', 'venv', 'lib', 'python3.14', 'site-packages', 'face_recognition_models', 'models'
-)
-
 detector_path = os.path.join(MODEL_DIR, 'mmod_human_face_detector.dat')
 if not os.path.exists(detector_path):
-    log.warning(f"CNN detector model not found at {detector_path}, CNN fallback disabled")
+    log.warning(f"CNN detector model not found, CNN fallback disabled")
 
 _detector = None
 _hog_detector = None
