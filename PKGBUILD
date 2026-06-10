@@ -1,6 +1,6 @@
 # Maintainer: lordhanya <ashifrahman8638471722@gmail.com>
 
-pkgname=iris-face-auth
+pkgname=iris
 pkgver=1.0.0
 pkgrel=1
 pkgdesc="Infrared Recognition & Identity System - password-less face unlock for SDDM on Thinkpad IR cameras"

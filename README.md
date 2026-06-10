@@ -1,6 +1,17 @@
-# IRIS — Infrared Recognition & Identity System
+<p align="center">
+  <img src="https://img.shields.io/aur/version/iris" alt="AUR version">
+  <img src="https://img.shields.io/badge/license-MIT-blue" alt="License">
+  <img src="https://img.shields.io/badge/python-3.10%2B-blue" alt="Python">
+</p>
 
-Password-less face unlock for SDDM on Linux, optimized for Thinkpad IR cameras.
+<h1 align="center">IRIS</h1>
+<h3 align="center">Infrared Recognition & Identity System</h3>
+
+<p align="center">
+  Password-less face unlock for SDDM — optimized for Thinkpad IR cameras
+</p>
+
+---
 
 ## Features
 
@@ -12,73 +23,88 @@ Password-less face unlock for SDDM on Linux, optimized for Thinkpad IR cameras.
 - **Multi-layer failsafe** — never lock yourself out (emergency disable, password fallback)
 - **IR emitter control** — integrates with `linux-enable-ir-emitter`
 
-## Requirements
+---
 
-### Python
-- Python 3.10+
-- dlib, face_recognition, opencv-python, numpy
+## Install
 
-### System
-- v4l-utils
-- linux-enable-ir-emitter (AUR: `linux-enable-ir-emitter`)
-- SDDM (for lock screen integration)
-
-## Quick Install
-
-### Arch Linux (AUR)
-
-*Coming soon — search `iris-face-auth` on AUR*
-
-### Manual
+### AUR (recommended)
 
 ```bash
-# 1. Install dependencies
-sudo pacman -S v4l-utils python-opencv python-numpy
-yay -S linux-enable-ir-emitter
-pip install dlib face_recognition
+yay -S iris
+```
 
-# 2. Clone and set up
+### Manual (local checkout)
+
+```bash
 git clone https://github.com/lordhanya/iris
 cd iris
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-
-# 3. Configure IR emitter
-sudo linux-enable-ir-emitter configure
-
-# 4. Enroll your face
-python cli/enroll.py --force
-
-# 5. Test authentication
-python cli/auth.py --timeout 10
-
-# 6. Integrate with SDDM
-sudo scripts/install-pam.sh
+sudo pacman -S v4l-utils
+yay -S linux-enable-ir-emitter
 ```
+
+---
+
+## Setup
+
+### 1. Configure IR emitter
+
+```bash
+sudo linux-enable-ir-emitter configure
+```
+
+### 2. Configure IRIS
+
+```bash
+# AUR install:
+mkdir -p ~/.config/iris
+cp /usr/share/iris/config.example.ini ~/.config/iris/config.ini
+
+# Local checkout:
+cp config.example.ini config.ini
+```
+
+### 3. Enroll your face
+
+```bash
+iris-enroll --force
+```
+
+### 4. Test authentication
+
+```bash
+iris-auth --timeout 10
+```
+
+### 5. Integrate with SDDM
+
+```bash
+sudo /usr/share/iris/scripts/install-pam.sh
+```
+
+---
 
 ## Usage
 
-### Enroll your face
-```bash
-iris-enroll --force
-# Or from a local checkout:
-# source venv/bin/activate && python cli/enroll.py --force
-```
-
-### Test authentication
-```bash
-iris-auth --timeout 10
-# Or from a local checkout:
-# source venv/bin/activate && python cli/auth.py --timeout 10
-```
-
 ### Lock and unlock
+
 ```bash
 loginctl lock-session
-# Press Enter at the lock screen
-# IRIS will authenticate and unlock automatically
 ```
+
+Press `Enter` at the lock screen — IRIS authenticates and unlocks automatically.
+
+### Emergency disable
+
+```bash
+touch /tmp/face-auth-emergency-disable
+```
+
+To re-enable: `rm /tmp/face-auth-emergency-disable`
+
+---
 
 ## Failsafe
 
@@ -87,35 +113,9 @@ loginctl lock-session
 | Emergency disable | `touch /tmp/face-auth-emergency-disable` |
 | Config disable | Set `disabled = true` in `~/.config/iris/config.ini` |
 | Restore PAM backup | `sudo cp /etc/pam.d/sddm.backup /etc/pam.d/sddm` |
-| Uninstall PAM | `sudo scripts/uninstall-pam.sh` |
+| Uninstall PAM | `sudo /usr/share/iris/scripts/uninstall-pam.sh` |
 
-## Configuration
-
-Copy `config.example.ini` to `~/.config/iris/config.ini` and edit:
-
-```bash
-mkdir -p ~/.config/iris
-cp /usr/share/iris/config.example.ini ~/.config/iris/config.ini
-```
-
-If running from a local checkout, place it in the project root instead.
-
-See [docs/CONFIGURATION.md](docs/CONFIGURATION.md) for all options.
-
-## Project Structure
-
-```
-iris/
-├── cli/            # Entry points (auth.py, enroll.py)
-├── core/           # Library modules
-├── scripts/        # PAM script, installer, utilities
-├── data/           # Face encodings (gitignored)
-├── docs/           # Documentation
-├── logs/           # Log files (gitignored)
-├── config.ini      # User configuration (gitignored)
-├── config.example.ini  # Example configuration
-└── venv/           # Python virtual environment (gitignored)
-```
+---
 
 ## How It Works
 
@@ -128,6 +128,28 @@ iris/
 7. Encoding is compared against stored enrollment
 8. Match → unlock; No match → password prompt
 
+---
+
+## Project Structure
+
+```
+/usr/share/iris/
+├── cli/              # Entry points (auth.py, enroll.py)
+├── core/             # Library modules
+├── scripts/          # PAM script, installer, utilities
+├── models/           # dlib face detection/recognition models
+└── docs/             # Documentation
+
+~/.config/iris/
+└── config.ini        # User configuration
+
+~/.local/share/iris/
+├── data/             # Face encodings
+└── logs/             # Log files
+```
+
+---
+
 ## License
 
-MIT
+MIT — see [LICENSE](LICENSE)
