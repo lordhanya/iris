@@ -1,15 +1,23 @@
 <p align="center">
-  <img src="https://img.shields.io/aur/version/iris" alt="AUR version">
-  <img src="https://img.shields.io/badge/license-MIT-blue" alt="License">
-  <img src="https://img.shields.io/badge/python-3.10%2B-blue" alt="Python">
+  <img src="https://img.shields.io/aur/version/iris?style=for-the-badge&logo=archlinux&color=1793D1" alt="AUR">
+  <img src="https://img.shields.io/badge/license-MIT-blue?style=for-the-badge" alt="License">
+  <img src="https://img.shields.io/badge/python-3.10%2B-blue?style=for-the-badge&logo=python" alt="Python">
 </p>
 
-<h1 align="center">IRIS</h1>
-<h3 align="center">Infrared Recognition & Identity System</h3>
+<br>
+
+<h1 align="center">
+  <img src="https://raw.githubusercontent.com/lordhanya/iris/main/.github/logo.png" height="64" align="center">
+  IRIS
+</h1>
+
+<h3 align="center"><code>Infrared Recognition & Identity System</code></h3>
 
 <p align="center">
-  Password-less face unlock for SDDM — optimized for Thinkpad IR cameras
+  <b>Password-less face unlock for SDDM</b> — optimized for Thinkpad IR cameras
 </p>
+
+<br>
 
 ---
 
