@@ -6,16 +6,12 @@
 
 <br>
 
-<h1 align="center">
-  <img src="https://raw.githubusercontent.com/lordhanya/iris/main/.github/logo.png" height="64" align="center">
-  IRIS
-</h1>
-
-<h3 align="center"><code>Infrared Recognition & Identity System</code></h3>
-
-<p align="center">
+<div align="center">
+  <img src="logo/logo.png" height="400" align="center">
+  <p align="center">
   <b>Password-less face unlock for SDDM</b> — optimized for Thinkpad IR cameras
 </p>
+</div>
 
 <br>
 
