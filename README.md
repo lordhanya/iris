@@ -38,7 +38,7 @@ yay -S linux-enable-ir-emitter
 pip install dlib face_recognition
 
 # 2. Clone and set up
-git clone https://github.com/YOUR_USER/iris
+git clone https://github.com/lordhanya/iris
 cd iris
 python3 -m venv venv
 source venv/bin/activate
