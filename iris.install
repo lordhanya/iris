@@ -1,0 +1,31 @@
+post_install() {
+  echo ""
+  echo "==> IRIS — Infrared Recognition & Identity System installed"
+  echo ""
+  echo "  Quick start:"
+  echo "    1. iris-enroll          — enroll your face"
+  echo "    2. iris-auth --timeout 10  — test authentication"
+  echo "    3. sudo iris-install-pam   — integrate with SDDM"
+  echo ""
+  echo "  Failsafe:"
+  echo "    Emergency disable:  iris-disable"
+  echo "    Re-enable:          iris-enable"
+  echo "    Restore PAM backup: sudo cp /etc/pam.d/sddm.backup /etc/pam.d/sddm"
+  echo ""
+  echo "  Config: /usr/share/iris/config.ini"
+  echo "  Docs:   /usr/share/iris/docs/"
+  echo ""
+}
+
+post_upgrade() {
+  post_install
+}
+
+pre_remove() {
+  if grep -q "pam_exec.so.*face_auth.sh" /etc/pam.d/sddm 2>/dev/null; then
+    echo "WARNING: IRIS PAM integration is still active in /etc/pam.d/sddm"
+    echo "  Remove the IRIS line manually or run:"
+    echo "  sudo sed -i '/pam_exec.so.*face_auth.sh/d' /etc/pam.d/sddm"
+    echo "  (A backup was created at /etc/pam.d/sddm.iris-backup if needed)"
+  fi
+}

@@ -1,0 +1,10 @@
+venv/
+data/*.npy
+logs/
+__pycache__/
+*.pyc
+.env
+config.ini
+*.swp
+*.swo
+.DS_Store
